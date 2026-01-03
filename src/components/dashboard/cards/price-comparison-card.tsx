@@ -3,82 +3,73 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { ArrowDownNarrowWide } from "lucide-react";
-import { cn } from "@/lib/utils";
 
-interface Hotel {
+interface PriceItem {
   rank: number;
   name: string;
   source: string;
-  price: number;
+  price: string;
+  priceColor: string;
 }
 
 interface PriceComparisonCardProps {
-  hotels?: Hotel[];
   sortOrder?: "asc" | "desc";
   onSortChange?: () => void;
 }
 
-const defaultHotels: Hotel[] = [
-  { rank: 1, name: "OYO Hotel", source: "Agoda.com", price: 50 },
-  { rank: 2, name: "Boutique Hotel", source: "Booking.com", price: 80 },
-  { rank: 3, name: "Swiss Garden", source: "Booking.com", price: 150 },
+const priceItems: PriceItem[] = [
+  { rank: 1, name: "OYO Hotel", source: "Agoda.com", price: "RM 50/ Night", priceColor: "#34D399" },
+  { rank: 2, name: "Boutique Hotel", source: "Booking.com", price: "RM 80/ Night", priceColor: "#FBBF24" },
+  { rank: 3, name: "Swiss Garden", source: "Booking.com", price: "RM 150/ Night", priceColor: "#F87171" },
 ];
 
 export function PriceComparisonCard({
-  hotels = defaultHotels,
   sortOrder = "asc",
   onSortChange,
 }: PriceComparisonCardProps) {
-  const sortedHotels = [...hotels].sort((a, b) =>
-    sortOrder === "asc" ? a.price - b.price : b.price - a.price
-  );
-
-  const getPriceColor = (price: number) => {
-    if (price <= 50) return "text-emerald-500 border-emerald-200";
-    if (price <= 100) return "text-amber-500 border-amber-200";
-    return "text-red-500 border-red-200";
-  };
-
   return (
-    <Card className="border-purple-500 shadow-sm">
+    <Card className="border-[#9333EA] shadow-sm">
       <CardHeader className="pb-3">
         <div className="flex items-center justify-between">
-          <CardTitle className="text-base font-semibold text-slate-700">
+          <CardTitle className="text-base font-semibold text-[#334155]">
             Price Comparison
           </CardTitle>
           <Button
             variant="outline"
             size="sm"
             onClick={onSortChange}
-            className="text-xs gap-1.5 border-slate-200"
+            className="text-xs font-semibold text-[#334155] border-[#9333EA] gap-2"
           >
-            <ArrowDownNarrowWide className="size-3.5" />
+            <ArrowDownNarrowWide className="size-4" />
             {sortOrder === "asc" ? "Low to High" : "High to Low"}
           </Button>
         </div>
       </CardHeader>
       <CardContent>
         <div className="space-y-0">
-          {sortedHotels.map((hotel, index) => (
+          {priceItems.map((item) => (
             <div
-              key={index}
-              className="flex items-center justify-between py-2 border-b border-slate-100 last:border-0"
+              key={item.rank}
+              className="flex items-center border-b border-[#E2E8F0] last:border-b-0"
             >
-              <div className="flex items-center gap-3">
-                <span className="text-xs text-slate-500 w-4">{hotel.rank}</span>
-                <span className="text-xs font-medium text-slate-700">
-                  {hotel.name}
-                </span>
+              <div className="w-6 py-2 text-xs text-[#334155]">
+                {item.rank}
               </div>
-              <div className="flex items-center gap-3">
-                <span className="text-xs text-slate-500">{hotel.source}</span>
+              <div className="flex-1 py-2 text-xs text-[#334155]">
+                {item.name}
+              </div>
+              <div className="py-2 text-xs text-[#334155] text-right">
+                {item.source}
+              </div>
+              <div className="py-2 pl-4">
                 <span
-                  className={cn(
-                    "text-xs font-semibold px-2 py-0.5 rounded border",
-                    getPriceColor(hotel.price)
-                  )}
+                  className="text-xs font-semibold px-2 py-[3px] rounded-lg border"
+                  style={{ 
+                    color: item.priceColor,
+                    borderColor: item.priceColor 
+                  }}
                 >
-                  RM {hotel.price}/ Night
+                  {item.price}
                 </span>
               </div>
             </div>
@@ -88,4 +79,3 @@ export function PriceComparisonCard({
     </Card>
   );
 }
-

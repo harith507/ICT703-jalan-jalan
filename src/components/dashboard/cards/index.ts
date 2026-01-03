@@ -5,10 +5,12 @@ export { WeatherCard } from "./weather-card";
 export { TrendingCard } from "./trending-card";
 export { CrowdLevelCard } from "./crowd-level-card";
 export { TrafficCard } from "./traffic-card";
+export { CrowdTrafficCard } from "./crowd-traffic-card";
 export { ItineraryCTACard } from "./itinerary-cta-card";
 export { BudgetCTACard } from "./budget-cta-card";
 export { BudgetDonutChart } from "./budget-donut-chart";
 export { SpendingBreakdownCard } from "./spending-breakdown-card";
 export { ItineraryTimeline } from "./itinerary-timeline";
 export { BookingListCard } from "./booking-list-card";
-
+export { HalalSpotsCard } from "./halal-spots-card";
+export { BudgetMetricsCard } from "./budget-metrics-card";

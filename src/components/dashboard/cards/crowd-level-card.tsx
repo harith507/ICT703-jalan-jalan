@@ -1,116 +1,100 @@
 "use client";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Users } from "lucide-react";
 
-interface CrowdLevelCardProps {
-  level?: "Low" | "Moderate" | "High";
-  data?: number[];
-}
-
-const defaultData = [30, 45, 60, 55, 70, 65, 50, 45, 55, 60, 75, 80];
-
-export function CrowdLevelCard({
-  level = "Moderate",
-  data = defaultData,
-}: CrowdLevelCardProps) {
-  const getLevelColor = () => {
-    switch (level) {
-      case "Low":
-        return "text-emerald-500 bg-emerald-50";
-      case "Moderate":
-        return "text-amber-500 bg-amber-50";
-      case "High":
-        return "text-red-500 bg-red-50";
-    }
-  };
-
-  const getChartColor = () => {
-    switch (level) {
-      case "Low":
-        return "#10b981";
-      case "Moderate":
-        return "#f59e0b";
-      case "High":
-        return "#ef4444";
-    }
-  };
-
+export function CrowdLevelCard() {
+  const data = [30, 45, 60, 55, 70, 65, 50, 45, 55, 60, 75, 80];
   const maxValue = Math.max(...data);
-  const chartHeight = 60;
+  const chartHeight = 120;
 
   return (
-    <Card className="border-purple-500 shadow-sm">
+    <Card className="border-[#9333EA] shadow-sm">
       <CardHeader className="pb-2">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <Users className="size-4 text-purple-500" />
-            <CardTitle className="text-base font-semibold text-slate-700">
-              Crowd Level
-            </CardTitle>
-          </div>
-          <span
-            className={`text-xs font-semibold px-2 py-1 rounded-full ${getLevelColor()}`}
-          >
-            {level}
-          </span>
-        </div>
+        <CardTitle className="text-base font-semibold text-[#334155]">
+          Crowd Level
+        </CardTitle>
       </CardHeader>
       <CardContent>
-        {/* Simple Area Chart */}
-        <div className="relative h-16 mt-2">
+        {/* Area Chart */}
+        <div className="relative h-32 mt-2">
           <svg
             width="100%"
             height={chartHeight}
-            viewBox={`0 0 ${data.length * 20} ${chartHeight}`}
+            viewBox={`0 0 ${data.length * 28} ${chartHeight}`}
             preserveAspectRatio="none"
             className="overflow-visible"
           >
-            {/* Area fill */}
+            {/* Grid lines */}
+            {[0, 1, 2, 3, 4].map((i) => (
+              <line
+                key={i}
+                x1="0"
+                y1={i * (chartHeight / 4)}
+                x2={data.length * 28}
+                y2={i * (chartHeight / 4)}
+                stroke="#F1F5F9"
+                strokeWidth="1"
+              />
+            ))}
+            
+            {/* Area fill - Purple gradient */}
+            <defs>
+              <linearGradient id="crowdGradient" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stopColor="#DAB2FF" stopOpacity="0.7" />
+                <stop offset="100%" stopColor="#F0E0FF" stopOpacity="0.7" />
+              </linearGradient>
+            </defs>
             <path
               d={`
                 M 0 ${chartHeight}
                 ${data
                   .map(
                     (value, index) =>
-                      `L ${index * 20 + 10} ${
+                      `L ${index * 28 + 14} ${
                         chartHeight - (value / maxValue) * (chartHeight - 10)
                       }`
                   )
                   .join(" ")}
-                L ${(data.length - 1) * 20 + 10} ${chartHeight}
+                L ${(data.length - 1) * 28 + 14} ${chartHeight}
                 Z
               `}
-              fill={getChartColor()}
-              fillOpacity={0.2}
+              fill="url(#crowdGradient)"
             />
             {/* Line */}
             <path
               d={`
-                M 10 ${chartHeight - (data[0] / maxValue) * (chartHeight - 10)}
+                M 14 ${chartHeight - (data[0] / maxValue) * (chartHeight - 10)}
                 ${data
                   .slice(1)
                   .map(
                     (value, index) =>
-                      `L ${(index + 1) * 20 + 10} ${
+                      `L ${(index + 1) * 28 + 14} ${
                         chartHeight - (value / maxValue) * (chartHeight - 10)
                       }`
                   )
                   .join(" ")}
               `}
               fill="none"
-              stroke={getChartColor()}
-              strokeWidth={2}
+              stroke="#C67EFF"
+              strokeWidth={1}
             />
           </svg>
         </div>
-        <div className="flex justify-between text-xs text-slate-400 mt-1">
-          <span>6AM</span>
+        <div className="flex justify-between text-xs text-[#64748B] mt-1">
+          <span>8AM</span>
+          <span>10AM</span>
           <span>12PM</span>
+          <span>2PM</span>
+          <span>4PM</span>
           <span>6PM</span>
+        </div>
+        <div className="flex items-center gap-2 mt-3">
+          <span className="text-xs text-[#334155]">Crowd Level:</span>
+          <span className="text-xs font-semibold text-[#FBBF24] border border-[#FBBF24] px-2 py-[3px] rounded-lg">
+            Moderate
+          </span>
         </div>
       </CardContent>
     </Card>
   );
 }
-

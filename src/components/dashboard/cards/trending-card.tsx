@@ -1,51 +1,37 @@
 "use client";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { TrendingUp } from "lucide-react";
 
 interface TrendingItem {
-  tag: string;
-  isHot?: boolean;
+  rank: number;
+  text: string;
 }
 
-interface TrendingCardProps {
-  items?: TrendingItem[];
-}
-
-const defaultItems: TrendingItem[] = [
-  { tag: "#LangkawiSunset", isHot: true },
-  { tag: "Penang Hot Air Balloon Fiesta", isHot: false },
-  { tag: "Viral Char Kuey Teaw", isHot: false },
+const trendingItems: TrendingItem[] = [
+  { rank: 1, text: "#LangkawiSunset" },
+  { rank: 2, text: "Penang Hot Air Balloon Fiesta" },
+  { rank: 3, text: "Viral Char Kuey Teaw" },
 ];
 
-export function TrendingCard({ items = defaultItems }: TrendingCardProps) {
+export function TrendingCard() {
   return (
-    <Card className="border-purple-500 shadow-sm">
+    <Card className="border-[#9333EA] shadow-sm">
       <CardHeader className="pb-2">
-        <div className="flex items-center gap-2">
-          <TrendingUp className="size-4 text-purple-500" />
-          <CardTitle className="text-base font-semibold text-slate-700">
-            Now Trending
-          </CardTitle>
-        </div>
+        <CardTitle className="text-base font-semibold text-[#334155]">
+          Now Trending
+        </CardTitle>
       </CardHeader>
       <CardContent className="space-y-2">
-        {items.map((item, index) => (
+        {trendingItems.map((item) => (
           <div
-            key={index}
-            className="flex items-center gap-2 p-2 rounded-lg hover:bg-slate-50 transition-colors cursor-pointer"
+            key={item.rank}
+            className="flex items-center border-b border-[#E2E8F0] last:border-b-0 py-2"
           >
-            <span className="text-xs text-slate-400 w-4">{index + 1}.</span>
-            <span className="text-sm text-slate-700 flex-1">{item.tag}</span>
-            {item.isHot && (
-              <span className="text-xs bg-red-100 text-red-600 px-2 py-0.5 rounded-full font-medium">
-                🔥 Hot
-              </span>
-            )}
+            <div className="w-6 text-xs text-[#334155]">{item.rank}</div>
+            <div className="flex-1 text-xs text-[#334155]">{item.text}</div>
           </div>
         ))}
       </CardContent>
     </Card>
   );
 }
-

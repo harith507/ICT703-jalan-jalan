@@ -1,76 +1,53 @@
 "use client";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Car, AlertTriangle, CheckCircle2, Clock } from "lucide-react";
+import { TrendingUp, TrendingDown, ThumbsUp } from "lucide-react";
 
 interface TrafficUpdate {
-  type: "closure" | "subside" | "clear";
+  icon: "closure" | "subside" | "clear";
   message: string;
-  time?: string;
 }
 
-interface TrafficCardProps {
-  updates?: TrafficUpdate[];
-}
-
-const defaultUpdates: TrafficUpdate[] = [
-  { type: "closure", message: "Road closure", time: "Now" },
-  { type: "subside", message: "Traffic subside", time: "30 min" },
-  { type: "clear", message: "Road clear", time: "1 hr" },
+const trafficUpdates: TrafficUpdate[] = [
+  { icon: "closure", message: "Road closure at Jalan Memand (30 Mins)" },
+  { icon: "subside", message: "Traffic subside at Seksyen 1 (10 Mins)" },
+  { icon: "clear", message: "Road clear at Jalan Indah" },
 ];
 
-export function TrafficCard({ updates = defaultUpdates }: TrafficCardProps) {
-  const getIcon = (type: TrafficUpdate["type"]) => {
-    switch (type) {
-      case "closure":
-        return <AlertTriangle className="size-4 text-red-500" />;
-      case "subside":
-        return <Clock className="size-4 text-amber-500" />;
-      case "clear":
-        return <CheckCircle2 className="size-4 text-emerald-500" />;
-    }
-  };
+const getIconAndColor = (type: TrafficUpdate["icon"]) => {
+  switch (type) {
+    case "closure":
+      return { Icon: TrendingUp, color: "#F87171", borderColor: "#F87171" };
+    case "subside":
+      return { Icon: TrendingDown, color: "#FBBF24", borderColor: "#FBBF24" };
+    case "clear":
+      return { Icon: ThumbsUp, color: "#34D399", borderColor: "#34D399" };
+  }
+};
 
-  const getStyle = (type: TrafficUpdate["type"]) => {
-    switch (type) {
-      case "closure":
-        return "border-red-200 bg-red-50";
-      case "subside":
-        return "border-amber-200 bg-amber-50";
-      case "clear":
-        return "border-emerald-200 bg-emerald-50";
-    }
-  };
-
+export function TrafficCard() {
   return (
-    <Card className="border-purple-500 shadow-sm">
+    <Card className="border-[#9333EA] shadow-sm">
       <CardHeader className="pb-2">
-        <div className="flex items-center gap-2">
-          <Car className="size-4 text-purple-500" />
-          <CardTitle className="text-base font-semibold text-slate-700">
-            Traffic Movement
-          </CardTitle>
-        </div>
+        <CardTitle className="text-base font-semibold text-[#334155]">
+          Traffic Movement
+        </CardTitle>
       </CardHeader>
       <CardContent className="space-y-2">
-        {updates.map((update, index) => (
-          <div
-            key={index}
-            className={`flex items-center justify-between p-2.5 rounded-lg border ${getStyle(
-              update.type
-            )}`}
-          >
-            <div className="flex items-center gap-2">
-              {getIcon(update.type)}
-              <span className="text-sm text-slate-700">{update.message}</span>
+        {trafficUpdates.map((update, index) => {
+          const { Icon, color, borderColor } = getIconAndColor(update.icon);
+          return (
+            <div
+              key={index}
+              className="flex items-center gap-2 px-2 py-[3px] rounded-lg border"
+              style={{ borderColor }}
+            >
+              <Icon className="size-3" style={{ color }} />
+              <span className="text-xs text-[#334155]">{update.message}</span>
             </div>
-            {update.time && (
-              <span className="text-xs text-slate-500">{update.time}</span>
-            )}
-          </div>
-        ))}
+          );
+        })}
       </CardContent>
     </Card>
   );
 }
-
